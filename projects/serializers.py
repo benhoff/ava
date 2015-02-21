@@ -5,7 +5,7 @@ from projects.models import Project
 class ProjectSerializer(serializers.Serializer):
     pk = serializers.IntegerField(read_only=True)
     title = serializers.CharField(max_length=30)
-    description = serializers.TextField()
+    description = serializers.CharField()
     linenos = serializers.BooleanField(required=False)
 
     def create(self, validated_data):
