@@ -3,7 +3,7 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 from projects.models import Project
-from project.serialzers import ProjectSerializer
+from projects.serializers import ProjectSerializer
 
 class JSONResponse(HttpResponse):
     """
@@ -15,7 +15,7 @@ class JSONResponse(HttpResponse):
         super(JSONResponse, self).__init__(content, **kwargs)
 
 @csrf_exempt
-def snippet_list(request):
+def project_list(request):
     """
     List all projects, or create a new project
     """
@@ -31,3 +31,28 @@ def snippet_list(request):
             serializer.save()
             return JSONResponse(serialzier.data, status=201)
         return JSONResponse(serializer.errors, status=400)
+
+def project_detail(request, pk):
+    """
+    Retrieve, update, or delete a code snippet.
+    """
+    try:
+        project = Project.objects.get(pk=pk)
+    except Project.DoesNotExist:
+        return HttpResponse(status=404)
+
+    if request.method == 'GET':
+        serializer = ProjectSerializer(project)
+        return JSONResponse(serializer.data)
+
+    elif request.method == 'PUT':
+        data = JSONParser().parse(request)
+        serializer = ProjectSerializer(project, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JSONResponse(serializer.data)
+        return JSONResponse(serializer.errors, status=400)
+
+    elif request.method == 'DELETE':
+        project.delete()
+        return HttpResponse(status=204)
