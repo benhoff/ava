@@ -3,19 +3,19 @@ from rest_framework import serializers
 from projects.models import Project
 from django.contrib.auth.models import User
 
-class ProjectSerializer(serializers.ModelSerializer):
+class ProjectSerializer(serializers.HyperlinkedModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
+    description = serializers.HyperlinkedIdentityField(view_name='project-description', format='html')
 
     class Meta:
         model = Project
-        fields = ('id', 'title', 'description', 'owner')
+        fields = ('url', 'title', 'description', 'owner')
         
 
-class UserSerializer(serializers.ModelSerializer):
-    projects = serializers.PrimaryKeyRelatedField(many=True, queryset=Project.objects.all())
-
+class UserSerializer(serializers.HyperlinkedModelSerializer):
+    projects = serializers.HyperlinkedRelatedField(many=True, view_name='project-detail', read_only=True)
     class Meta:
         model = User
-        fields = ('id', 'username', 'projects')
+        fields = ('url', 'username', 'projects')
 
 
