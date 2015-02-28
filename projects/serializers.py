@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 class ProjectSerializer(serializers.HyperlinkedModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
-    description = serializers.HyperlinkedIdentityField(view_name='project-description', format='html')
+    description = serializers.HyperlinkedIdentityField(view_name='project-highlight', format='html')
 
     class Meta:
         model = Project
