@@ -4,13 +4,9 @@ from rest_framework import generics
 
 #TODO: Set up permissions to something sane
 
-class RetrieveUserView(generics.RetrieveDestroyAPIView):
+class RetrieveUserView(generics.RetrieveUpdateDestroyAPIView):
     """
     This endpoint presents the users in the system    
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    lookup_fields = ('username')
-        
-        
-

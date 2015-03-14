@@ -3,10 +3,13 @@ from django.db import models
 # Idea generation stage -> Prototyping -> Manufacturing stage -> Store
 
 class Project(models.Model):
-    title = models.CharField(max_length=30)
+    title = models.SlugField(max_length=30)
     description = models.TextField()
     last_updated = models.DateField(auto_now=True)
-    owner = models.ForeignKey('auth.User', related_name='projects')
+    user = models.ForeignKey('auth.User', related_name='projects')
+    
+    parent_projects = models.ManyToManyField("self", symmetrical=False, related_name='parent')
+    child_projects = models.ManyToManyField("self", symmetrical=False, related_name='child')
 
     STATI = (('IDEA', 'Idea'), 
              ('PROTOTYPE', 'Prototyping'), 
