@@ -1,6 +1,6 @@
 from ideas.models import Idea
 from ideas.serializers import IdeaSerializer
-from rest_framework import viewsets
+from rest_framework import viewsets, permissions
 
 class IdeaViewSet(viewsets.ModelViewSet):
     """

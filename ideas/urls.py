@@ -4,9 +4,9 @@ from comments import urls
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
-router.register(r'^', views.IdeaViewSet)
+router.register(r'ideas', views.IdeaViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),
-    url(r'^/comments/$', include('comments.urls'), name='comment-view'),
+    #url(r'^/comments/$', include('comments.urls'), name='comment-view'),
 ]
