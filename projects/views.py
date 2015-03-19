@@ -1,5 +1,5 @@
 from projects.models import Project
-from projects.serializers import ProjectSerializer, ProjectViewSerializer
+from projects.serializers import ProjectSerializer, ProjectDetailSerializer
 from projects.permissions import IsOwnerOrReadOnly
 from rest_framework import permissions, viewsets, renderers
 from rest_framework.response import Response
@@ -13,6 +13,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
 
     Additionally we also provide an extra 'highlight' action.
     """
+
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,
@@ -27,5 +28,6 @@ class ProjectViewSet(viewsets.ModelViewSet):
         if pk is None:
             serializer = ProjectSerializer(project)
         else:
-            serializer =  ProjectViewSerializer(project)
-        return Response(serializer)
+            serializer =  ProjectDetailSerializer(project, 
+                                                  context={'request':request})
+        return Response(serializer.data)

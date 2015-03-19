@@ -5,8 +5,6 @@ from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
 router.register(r'ideas', views.IdeaViewSet)
-
-urlpatterns = [
+urlpatterns =[
     url(r'^', include(router.urls)),
-    #url(r'^/comments/$', include('comments.urls'), name='comment-view'),
 ]

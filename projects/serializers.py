@@ -14,10 +14,13 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
         model = Project
         fields = ('url', 'title', 'description', 'user', 'status')
 
-class ProjectViewSerializer(serializers.HyperlinkedModelSerializer):
+class ProjectDetailSerializer(serializers.HyperlinkedModelSerializer):
     project = ProjectSerializer
     ideas = IdeaSerializer(many=True,
                            read_only=True)
+
+    user = serializers.HyperlinkedRelatedField(view_name='user-detail',
+                                               queryset=User.objects.all())
 
     class Meta:
         model = Project
