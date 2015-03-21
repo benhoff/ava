@@ -20,7 +20,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
                           IsOwnerOrReadOnly,)
 
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+        serializer.save(user=self.request.user)
     
     def retrieve(self, request, pk=None):
         queryset = Project.objects.all()
@@ -30,4 +30,5 @@ class ProjectViewSet(viewsets.ModelViewSet):
         else:
             serializer =  ProjectDetailSerializer(project, 
                                                   context={'request':request})
+
         return Response(serializer.data)
