@@ -9,17 +9,6 @@ from rest_framework.test import APIRequestFactory, force_authenticate, APITestCa
 from projects.views import ProjectViewSet
 from projects.models import Project
 
-"""
-factory = APIRequestFactory()
-user = User.objects.get(pk='1')
-view = ProjectViewSet()
-
-request = factory.get('/project/')
-force_authenticate(request, user=user)
-response = view(request)
-"""
-user = User.objects.get(pk='1')
-
 class ProjectTests(APITestCase):
     EXAMPLE_TEST_DATA = {"title":"test", 
                          "description":"really, test",
@@ -34,6 +23,7 @@ class ProjectTests(APITestCase):
     def tearDown(self):
         self.user.delete()
         self.project.delete()
+
     """
     def test_expected_future_implementations(self):
         url = reverse('project-list')
@@ -50,7 +40,8 @@ class ProjectTests(APITestCase):
         data_dict = {'pk': self.project.pk}
         url = reverse('project-detail', kwargs=data_dict)
         self.client.force_authenticate(user=self.user)
-        response = self.client.put(url, data = {'title':'updated_title'})
+        data = {"title":"updated_title"}
+        response = self.client.patch(url, data=data, application='application/json')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(self.project.title, 'updated_title')
@@ -67,7 +58,7 @@ class ProjectTests(APITestCase):
         self.assertContains(response, 'title')
         self.assertContains(response, 'description')
         self.assertContains(response, 'user')
-
+    
     def test_project_list_has_expected_parameters(self):
         url = reverse('project-list')
         response = self.client.get(url, format='json')
