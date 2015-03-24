@@ -10,6 +10,6 @@ class Idea(models.Model):
     description = models.TextField()
     votes = models.IntegerField()
 
-    created = models.DateTimeField()
-    edited = models.DateTimeField(null=True)
+    created = models.DateTimeField(auto_now_add=True)
+    edited = models.DateTimeField(auto_now=True)
     # revisions?

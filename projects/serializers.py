@@ -6,27 +6,27 @@ from users.serializers import UserSerializer
 from ideas.serializers import IdeaSerializer
 
 class ProjectSerializer(serializers.HyperlinkedModelSerializer):
-    username = serializers.ReadOnlyField(source='user.username')
-    user_url = serializers.HyperlinkedRelatedField(
+    ownername = serializers.ReadOnlyField(source='owner.username')
+    owner_url = serializers.HyperlinkedRelatedField(
             view_name='user-detail', 
-            source='user', 
+            source='owner', 
             read_only=True)
 
     class Meta:
         model = Project
-        fields = ('title', 'url', 'description', 'status', 'username', 'user_url')
+        fields = ('title', 'url', 'description', 'status', 'ownername', 'owner_url')
 
 class ProjectDetailSerializer(serializers.HyperlinkedModelSerializer):
     ideas = IdeaSerializer(many=True,
                            read_only=True)
 
-    username = serializers.ReadOnlyField(source='user.username')
-    user_url = serializers.HyperlinkedRelatedField(
+    ownername = serializers.ReadOnlyField(source='owner.username')
+    owner_url = serializers.HyperlinkedRelatedField(
             view_name='user-detail', 
-            source='user', 
+            source='owner', 
             read_only=True)
  
 
     class Meta:
         model = Project
-        fields = ('title', 'url', 'description', 'username','user_url', 'status', 'ideas')
+        fields = ('title', 'url', 'description', 'ownername','owner_url', 'status', 'ideas')
