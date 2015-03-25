@@ -11,10 +11,12 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
             view_name='user-detail', 
             source='owner', 
             read_only=True)
+    
+    ideas_count = serializers.ReadOnlyField(source='ideas.count')
 
     class Meta:
         model = Project
-        fields = ('title', 'url', 'description', 'status', 'ownername', 'owner_url')
+        fields = ('title', 'url', 'description', 'status', 'ownername', 'owner_url', 'ideas_count')
 
 class ProjectDetailSerializer(serializers.HyperlinkedModelSerializer):
     ideas = IdeaSerializer(many=True,
