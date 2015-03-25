@@ -16,7 +16,7 @@ class IdeaDetailSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Idea
-        fields = ('url',  'description', 'votes', 'username', 'user_link', 'created', 'edited', 'project')
+        fields = ('url','title',  'description', 'votes', 'username', 'user_link', 'created', 'edited', 'project')
 
 class IdeaSerializer(serializers.HyperlinkedModelSerializer):
     project = serializers.HyperlinkedRelatedField(view_name='project-detail',
@@ -30,4 +30,4 @@ class IdeaSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Idea
-        fields = ('url', 'project', 'description', 'votes', 'username', 'user_link')
+        fields = ('url', 'title', 'project', 'description', 'votes', 'username', 'user_link')

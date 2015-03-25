@@ -3,14 +3,16 @@ from ideas.serializers import IdeaSerializer, IdeaDetailSerializer
 from rest_framework import viewsets, permissions
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
-
-
+from rest_framework import permissions
+from ideas.permissions import IsOwnerOrReadOnly
 class IdeaViewSet(viewsets.ModelViewSet):
     """
     This viewset automagically provides 'list', 'create', 'retrieve', 'update', and 'destroy' actions
     """
     queryset = Idea.objects.all()
     serializer_class = IdeaSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,
+                          IsOwnerOrReadOnly,)
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
