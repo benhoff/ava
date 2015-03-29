@@ -6,6 +6,7 @@ from rest_framework.test import APITestCase, force_authenticate
 
 from projects.views import ProjectViewSet
 from projects.models import Project
+from ideas.models import Idea
 
 class ProjectTests(APITestCase):
     EXAMPLE_TEST_DATA = {"title":"test", 
@@ -28,6 +29,13 @@ class ProjectTests(APITestCase):
     def tearDown(self):
         self.user.delete()
         self.project.delete()
+
+    def test_project_list_has_ideas_count(self):
+        i = Idea(owner=self.user, project=self.project, title='IDEAR', description='RRRRr', votes=0)
+        i.save()
+        url = reverse('project-list')
+        response = self.client.get(url)
+        self.assertEqual(response.data['results'][0]['ideas_count'], 1)
 
     def test_correct_user_can_patch_project(self):
         """
@@ -82,6 +90,7 @@ class ProjectTests(APITestCase):
         self.assertContains(response, 'ownername')
         self.assertContains(response, 'owner_url')
         self.assertContains(response, 'status')
+        self.assertContains(response, 'count')
 
     def test_get_project_detail(self):
         """
