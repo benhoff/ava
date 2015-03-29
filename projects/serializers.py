@@ -14,11 +14,14 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
     
     ideas_count = serializers.ReadOnlyField(source='ideas.count')
 
-    ideas_list = serializers.HyperlinkedRelatedField(source='project.ideas', view_name='ideas-list', read_only=True)
+    """
+    ideas_list = serializers.HyperlinkedRelatedField(source='ideas', 
+                                                     view_name='idea-list')
+    """
 
     class Meta:
         model = Project
-        fields = ('title', 'url', 'description', 'status', 'ownername', 'owner_url','ideas_count', 'ideas-list')
+        fields = ('title', 'url', 'description', 'status', 'ownername', 'owner_url','ideas_count')
 
 class ProjectDetailSerializer(serializers.HyperlinkedModelSerializer):
     ideas = IdeaSerializer(many=True,
