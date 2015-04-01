@@ -10,7 +10,7 @@ router = rfr.SimpleRouter()
 router.register(r'projects', views.ProjectViewSet)
 
 ideas_router = nrfr.NestedSimpleRouter(router, r'projects', lookup='project')
-ideas_router.register(r'ideas', ideas.views.IdeaViewSet)
+ideas_router.register(r'ideas', ideas.views.NestedIdeaViewSet)
 
 # The API URLS are now determine automatically by the router.
 # Additionally, we include the login URLS for the browsable API.

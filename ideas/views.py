@@ -11,8 +11,9 @@ class NestedIdeaViewSet(viewsets.ModelViewSet):
     This viewset is nested under projects and provides 'list', 'create', 'retrieve', 'update', and 'destroy' actions
     """
     def list(self, request, project_pk=None):
-        ideas = self.queryset.filter(project=project_pk)
+        ideas = self.queryset.get(project=project_pk)
         serializer = IdeaSerializer(ideas)
+
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None, project_pk=None):
