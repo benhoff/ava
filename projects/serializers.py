@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
 
+from rest_framework.reverse import reverse
 from rest_framework import serializers
 from rest_framework_nested import relations
 
@@ -10,14 +10,11 @@ from ideas.serializers import IdeaSerializer
 from ideas.models import Idea
 
 
-class HyperlinkedIdeaList(serializers.HyperlinkedRelatedField):
+class HyperlinkedIdeaList(serializers.HyperlinkedIdentityField):
     def to_representation(self, value):
-        ideas = value.all()
-        print(ideas)
-        results = []
-        for idea in ideas:
-            results.append(reverse('idea-list', kwargs={'project_pk' : idea.project.pk}))
-        return results
+        request = self.context.get('request', None)
+        format = self.context.get('format', None)
+        return self.get_url(value, self.view_name, request, format)
 
 class HyperlinkedIdeaField(serializers.HyperlinkedRelatedField):
 
@@ -38,9 +35,10 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
             read_only=True)
     
     ideas_count = serializers.ReadOnlyField(source='ideas.count')
-    ideas_list = HyperlinkedIdeaList(view_name='idea-list',
-                                     read_only=True,
-                                     source='ideas')
+    ideas_list = serializers.HyperlinkedIdentityField(view_name='idea-list',
+                                                      read_only=True,
+                                                      source='ideas',
+                                                      lookup_url_kwarg='idea-list')
     class Meta:
         model = Project
         fields = ('title', 
