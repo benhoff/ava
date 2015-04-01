@@ -2,6 +2,7 @@ from django.conf.urls import url, include
 from projects import views
 import ideas.views
 import rest_framework.routers as rfr
+
 # nrfr -> nested rest framework routers
 import rest_framework_nested.routers as nrfr
 

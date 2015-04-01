@@ -9,23 +9,37 @@ from users.serializers import UserSerializer
 from ideas.serializers import IdeaSerializer
 from ideas.models import Idea
 
+class HyperlinkedNestedRelatedField(serializers.HyperlinkedRelatedField):
+    def __init__(self, view_name=None, additional_reverse_kwargs={}, **kwargs):
+        self.additional_reverse_kwargs = additional_reverse_kwargs
+        super(HyperlinkedNestedRelatedField, self).__init__(view_name, **kwargs)
 
-class HyperlinkedIdeaList(serializers.HyperlinkedIdentityField):
     def to_representation(self, value):
         request = self.context.get('request', None)
         format = self.context.get('format', None)
+
         return self.get_url(value, self.view_name, request, format)
 
-class HyperlinkedIdeaField(serializers.HyperlinkedRelatedField):
+    def get_url(self, obj, view_name, request, format):
+        """
+        Given an object, returh the URL that hyperlinks to the object
 
-    def to_representation(self, value):
-        url = reverse('idea-detail', kwargs={'project_pk': value.project.pk,
-                                           'pk' : value.pk})
-        return url
-
-    def to_internal_value(self, data):
-        print(type(data))
-        return "dummy"
+        May raise a `NoReverseMatch` if the `view_name` and `lookup_field` 
+        attributes are not configured to correctly match the URL conf.
+        """
+        print("made it here")
+        kwargs = {}
+        print(self.additional_reverse_kwargs)
+        if 'list' in self.view_name:
+            kwargs[self.lookup_url_kwarg: self.source.pk]
+        for key, value in self.additional_reverse_kwargs.items():
+            kwargs[key] = getattr(obj, value, None)
+        print(self.lookup_url_kwarg)
+        if 'detail' in self.view_name:
+            kwargs.update({self.lookup_url_kwarg: getattr(obj, self.lookup_field)})
+        print(kwargs)
+        print("view name: {}".format(view_name))
+        return self.reverse(view_name, kwargs=kwargs, request=request, format=format)
 
 class ProjectSerializer(serializers.HyperlinkedModelSerializer):
     ownername = serializers.ReadOnlyField(source='owner.username')
@@ -35,10 +49,13 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
             read_only=True)
     
     ideas_count = serializers.ReadOnlyField(source='ideas.count')
-    ideas_list = serializers.HyperlinkedIdentityField(view_name='idea-list',
-                                                      read_only=True,
-                                                      source='ideas',
-                                                      lookup_url_kwarg='idea-list')
+    idea_list = HyperlinkedNestedRelatedField(
+            view_name='idea-list',
+            source='ideas',
+            lookup_field='all',
+            read_only=True,
+            additional_reverse_kwargs={"project_pk" : "pk"})
+
     class Meta:
         model = Project
         fields = ('title', 
@@ -48,20 +65,21 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
                   'ownername', 
                   'owner_url',
                   'ideas_count',
-                  'ideas_list')
+                  'idea_list')
 
 class ProjectDetailSerializer(serializers.HyperlinkedModelSerializer):
-    ideas = HyperlinkedIdeaField(view_name='idea-detail',
-                                 many=True,
-                                 read_only=True)
-
     ownername = serializers.ReadOnlyField(source='owner.username')
     owner_url = serializers.HyperlinkedRelatedField(
             view_name='user-detail', 
             source='owner', 
             read_only=True)
- 
+
+    idea_url = HyperlinkedNestedRelatedField(
+            view_name='idea-detail',
+            read_only=True,
+            source='idea',
+            additional_reverse_kwargs={"project_pk" : "pk"})
 
     class Meta:
         model = Project
-        fields = ('title', 'url', 'description', 'ownername','owner_url', 'status', 'ideas')
+        fields = ('title', 'url', 'description', 'ownername','owner_url', 'status', 'idea_url')
