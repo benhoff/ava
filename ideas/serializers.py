@@ -2,7 +2,7 @@ from ideas.models import Idea
 from rest_framework import serializers
 from projects.models import Project
 from comments.models import Comment
-from django.contrib.auth.models import User
+from rest_extensions.relations import HyperlinkedNestedIdentityField
 
 class IdeaDetailSerializer(serializers.HyperlinkedModelSerializer):
     username = serializers.ReadOnlyField(source='owner.username')
@@ -27,6 +27,13 @@ class IdeaSerializer(serializers.HyperlinkedModelSerializer):
         view_name='user-detail', 
         source='owner',
         read_only=True)
+    
+    url = HyperlinkedNestedIdentityField(
+            view_name='idea-detail',
+            many=True,
+            queryset=Idea.objects.all(),
+            additional_reverse_kwargs={"project_pk" : 'project_id'}
+            )
 
     class Meta:
         model = Idea
