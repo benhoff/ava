@@ -11,6 +11,12 @@ class IdeaDetailSerializer(serializers.HyperlinkedModelSerializer):
         source='owner',
         read_only=True)
 
+    url = HyperlinkedNestedIdentityField(
+            view_name='idea-detail',
+            lookup_field="pk",
+            additional_reverse_kwargs={'project_pk' : 'project_id'}
+            )
+
     project = serializers.HyperlinkedRelatedField(view_name='project-detail',
                                                   queryset=Project.objects.all())
 
@@ -27,12 +33,11 @@ class IdeaSerializer(serializers.HyperlinkedModelSerializer):
         view_name='user-detail', 
         source='owner',
         read_only=True)
-    
+
     url = HyperlinkedNestedIdentityField(
             view_name='idea-detail',
-            many=True,
-            queryset=Idea.objects.all(),
-            additional_reverse_kwargs={"project_pk" : 'project_id'}
+            lookup_field="pk",
+            additional_reverse_kwargs={'project_pk' : 'project_id'}
             )
 
     class Meta:
