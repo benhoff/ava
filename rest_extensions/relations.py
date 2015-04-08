@@ -18,7 +18,6 @@ class HyperlinkedNestedIdentityField(serializers.HyperlinkedIdentityField):
         kwargs.update({self.lookup_url_kwarg: getattr(obj, self.lookup_field)})
         return self.reverse(view_name, kwargs=kwargs, request=request, format=format)
 
-
 class HyperlinkedNestedRelatedField(serializers.HyperlinkedRelatedField):
     def __init__(self, view_name=None, additional_reverse_kwargs={}, **kwargs):
         self.additional_reverse_kwargs = additional_reverse_kwargs

@@ -3,7 +3,7 @@ from comments import views
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
-router.register(r'^', views.CommentViewSet)
+router.register(r'comments', views.CommentViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls))

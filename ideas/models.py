@@ -2,6 +2,8 @@ from django.db import models
 from projects.models import Project
 from django.contrib.auth.models import User
 
+# TODO: Think about how to make a separate table (maybe?) for each project ideas
+
 class Idea(models.Model):
     owner = models.ForeignKey(User, related_name='ideas') 
     project = models.ForeignKey(Project,related_name='ideas') 

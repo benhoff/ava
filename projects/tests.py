@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 from rest_framework import status
 from rest_framework.test import APITestCase, force_authenticate
 
-from projects.views import ProjectViewSet
 from projects.models import Project
 from ideas.models import Idea
 

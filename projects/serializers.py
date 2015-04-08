@@ -1,7 +1,9 @@
 from rest_framework import serializers
 
-from projects.models import Project
 from rest_extensions.relations import HyperlinkedNestedRelatedField
+
+from projects.models import Project
+from ideas.serializers import NestedIdeaSerializer
 
 class ProjectSerializer(serializers.HyperlinkedModelSerializer):
     ownername = serializers.ReadOnlyField(source='owner.username')
@@ -37,15 +39,15 @@ class ProjectDetailSerializer(serializers.HyperlinkedModelSerializer):
             view_name='user-detail', 
             source='owner', 
             read_only=True)
-
-    idea_urls = HyperlinkedNestedRelatedField(
-            view_name='idea-detail',
-            read_only=True,
-            many=True,
-            source='ideas',
-            lookup_url_kwarg='pk',
-            additional_reverse_kwargs={"project_pk" : 'project_id'})
+    
+    idea_urls = NestedIdeaSerializer() 
 
     class Meta:
         model = Project
-        fields = ('title', 'url', 'description', 'ownername','owner_url', 'status', 'idea_urls')
+        fields = ('title', 
+                  'url', 
+                  'description', 
+                  'ownername',
+                  'owner_url', 
+                  'status', 
+                  'idea_urls')

@@ -9,8 +9,7 @@ from projects.models import Project
 from ideas.views import IdeaViewSet
 from ideas.models import Idea
 
-class IdeaTests(APITestCase):
-
+class _BaseIdeaTest(APITestCase):
     def setUp(self):
         self.user = User.objects.create_user('bob', password='foobar')
         self.project = Project(owner=self.user,
@@ -29,6 +28,12 @@ class IdeaTests(APITestCase):
         self.idea = Idea(**self.IDEA_DATA)
         self.idea.save()
 
+    def tearDown(self):
+        self.user.delete()
+        self.idea.delete()
+        self.project.delete()
+
+class IdeaTests(_BaseIdeaTest):
     def test_idea_detail_view(self):
         d = {'pk' : self.idea.pk}
         url = reverse('idea-detail', kwargs=d)

@@ -1,1 +1,25 @@
-FIXME: Users not being imported to the views
+manage the votes branch, reverse merge?
+
+
+think about how I want to display ideas. For example:
+	url
+	title
+	comment count
+
+Change the comments nesting scheme
+Think about how to get ideas to have unique pk values
+
+remove comment url (for now, to be impelement betterer later)
+Consitent API naming schemes (e.g. username vs owner, idea_list_url, etc, etc.)
+Change project url to use slugs instead of pk
+
+think about better ways to implement a `mailing list`
+
+
+
+Roadmap:
+	Add models to projects: Discussion, Wiki, Problems
+
+discussion -> forum
+problems -> github issues
+wiki -> wiki
