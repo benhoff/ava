@@ -1,5 +1,5 @@
 from ideas.models import Idea
-from ideas.serializers import IdeaSerializer, IdeaDetailSerializer
+from ideas.serializers import IdeaSerializer
 from rest_framework import viewsets, permissions
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
@@ -22,7 +22,7 @@ class NestedIdeaViewSet(viewsets.ModelViewSet):
                                     context={'request': request})
 
         return Response(serializer.data)
-
+    """
     def retrieve(self, request, pk=None, project_pk=None):
         queryset = Idea.objects.all()
         idea = get_object_or_404(queryset, pk=pk, project_id=project_pk)
@@ -34,6 +34,7 @@ class NestedIdeaViewSet(viewsets.ModelViewSet):
                                               context={'request':request})
 
         return Response(serializer.data)
+    """
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)

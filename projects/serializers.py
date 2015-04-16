@@ -3,44 +3,33 @@ from rest_framework import serializers
 from rest_extensions.relations import HyperlinkedNestedRelatedField
 
 from projects.models import Project
-from ideas.serializers import NestedIdeaSerializer
+from ideas.models import Idea
+from ideas.serializers import IdeaSerializer
 
-class ProjectSerializer(serializers.HyperlinkedModelSerializer):
+class ProjectSerializer(serializers.ModelSerializer):
     ownername = serializers.ReadOnlyField(source='owner.username')
-    owner_url = serializers.HyperlinkedRelatedField(
-            view_name='user-detail', 
-            source='owner', 
-            read_only=True)
-    
-    ideas_count = serializers.ReadOnlyField(source='ideas.count')
-    idea_list_url = HyperlinkedNestedRelatedField(
-            view_name='idea-list',
-            source='ideas',
-            read_only=True,
-            lookup_field='instance.pk',
-            lookup_url_kwarg='project_pk'
-            )
+    ideas = IdeaSerializer(many=True)
     class Meta:
         model = Project
         fields = (
+                'id',
                 'title', 
                 'url', 
                 'description', 
                 'status', 
                 'ownername', 
-                'owner_url',
-                'ideas_count',
-                'idea_list_url'
-                  )
+                'owner',
+                'ideas')
 
-class ProjectDetailSerializer(serializers.HyperlinkedModelSerializer):
+class ProjectDetailSerializer(serializers.ModelSerializer):
     ownername = serializers.ReadOnlyField(source='owner.username')
-    owner_url = serializers.HyperlinkedRelatedField(
-            view_name='user-detail', 
-            source='owner', 
-            read_only=True)
-    
-    idea_urls = NestedIdeaSerializer() 
+
+    # Desired behavior is to directly include the idea serializer 
+
+    idea_list = serializers.PrimaryKeyRelatedField(
+            queryset=Idea.objects.all(),
+            many=True,
+            source='ideas')
 
     class Meta:
         model = Project
@@ -48,6 +37,6 @@ class ProjectDetailSerializer(serializers.HyperlinkedModelSerializer):
                   'url', 
                   'description', 
                   'ownername',
-                  'owner_url', 
-                  'status', 
-                  'idea_urls')
+                  'owner', 
+                  'status',
+                  'idea_list')
