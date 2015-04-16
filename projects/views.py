@@ -1,5 +1,5 @@
 from projects.models import Project
-from projects.serializers import ProjectSerializer, ProjectDetailSerializer
+from projects.serializers import ProjectSerializer
 from projects.permissions import IsOwnerOrReadOnly
 from rest_framework import permissions, viewsets, renderers
 from rest_framework.response import Response
@@ -22,14 +22,3 @@ class ProjectViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
-    
-    def retrieve(self, request, pk=None):
-        queryset = Project.objects.all()
-        project = get_object_or_404(queryset, pk=pk)
-        if pk is None:
-            serializer = ProjectSerializer(project)
-        else:
-            serializer =  ProjectDetailSerializer(project, 
-                                                  context={'request':request})
-
-        return Response(serializer.data)

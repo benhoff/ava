@@ -8,6 +8,8 @@ from ideas.serializers import IdeaSerializer
 
 class ProjectSerializer(serializers.ModelSerializer):
     ownername = serializers.ReadOnlyField(source='owner.username')
+
+    # Is this better suited to use as a 'edge'
     ideas = IdeaSerializer(many=True)
     class Meta:
         model = Project
@@ -20,23 +22,3 @@ class ProjectSerializer(serializers.ModelSerializer):
                 'ownername', 
                 'owner',
                 'ideas')
-
-class ProjectDetailSerializer(serializers.ModelSerializer):
-    ownername = serializers.ReadOnlyField(source='owner.username')
-
-    # Desired behavior is to directly include the idea serializer 
-
-    idea_list = serializers.PrimaryKeyRelatedField(
-            queryset=Idea.objects.all(),
-            many=True,
-            source='ideas')
-
-    class Meta:
-        model = Project
-        fields = ('title', 
-                  'url', 
-                  'description', 
-                  'ownername',
-                  'owner', 
-                  'status',
-                  'idea_list')
