@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'projects',
     'ideas',
     'comments',
+    'discussions',
 )
 
 MIDDLEWARE_CLASSES = (

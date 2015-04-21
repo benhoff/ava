@@ -21,6 +21,3 @@ class Project(models.Model):
     # wiki
     # Code -> Github link? Or something
     # Issues??
-    # Ideas
-    # forum/discussion
-    # 

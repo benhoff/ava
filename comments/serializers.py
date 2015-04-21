@@ -10,6 +10,5 @@ class CommentSerializer(serializers.ModelSerializer):
                 'id',
                 'ownername',
                 'owner', 
-                'content', 
-                'idea')
+                'content')
 
