@@ -1,5 +1,6 @@
-from ideas.models import Idea
 from rest_framework import serializers
+
+from ideas.models import Idea
 from comments.serializers import CommentSerializer
 
 class IdeaSerializer(serializers.ModelSerializer):

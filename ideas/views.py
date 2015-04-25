@@ -1,9 +1,9 @@
-from ideas.models import Idea
-from ideas.serializers import IdeaSerializer
+from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, permissions
 from rest_framework.response import Response
-from django.shortcuts import get_object_or_404
 from rest_extensions.permissions import IsOwnerOrReadOnly
+from ideas.models import Idea
+from ideas.serializers import IdeaSerializer
 
 # TODO: Think about this name
 class IdeaViewSet(viewsets.ModelViewSet):
