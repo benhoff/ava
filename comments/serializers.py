@@ -11,4 +11,3 @@ class CommentSerializer(serializers.ModelSerializer):
                 'ownername',
                 'owner', 
                 'content')
-

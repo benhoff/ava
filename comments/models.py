@@ -7,7 +7,6 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.encoding import force_text
 
 from django.contrib.auth.models import User
-from ideas.models import Idea
 
 class CommentManager(models.Manager):
     def for_model(self, model):
@@ -18,7 +17,7 @@ class CommentManager(models.Manager):
         ct = ContentType.objects.get_for_model(model)
         queryset = self.get_queryset().filter(content_type=ct)
         if isinstance(model, models.Model):
-            queryset = queryset.filter(object_pk=force_text(model._get_pk_val()))
+            queryset = queryset.filter(object_id=force_text(model._get_pk_val()))
 
         return queryset
 
@@ -33,12 +32,12 @@ class Comment(models.Model):
                                      null=True,
                                      blank=True)
     
-    object_pk = models.PositiveIntegerField(
+    object_id = models.PositiveIntegerField(
             verbose_name=_('related object'),
             null=True)
 
     content_object = generic.GenericForeignKey(ct_field="content_type", 
-                                               fk_field="object_pk")
+                                               fk_field="object_id")
 
     owner = models.ForeignKey(User)
     content = models.CharField(max_length=3000)

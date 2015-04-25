@@ -6,8 +6,7 @@ from comments.serializers import CommentSerializer
 class IdeaSerializer(serializers.ModelSerializer):
     ownername = serializers.ReadOnlyField(source='owner.username')
     
-    comments = CommentSerializer(
-            many=True)
+    comments = CommentSerializer(many=True)
 
     class Meta:
         model = Idea
