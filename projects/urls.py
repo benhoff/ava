@@ -9,6 +9,7 @@ from projects import views
 import ideas.views as idea_view
 import discussions.views as discussion_view
 import problems.views as problem_view
+import blog.views as blog_view
 
 
 # Create a router and register our viewsets with it.
@@ -24,6 +25,9 @@ discussion_router.register(r'discussions', discussion_view.DiscussionViewSet)
 problem_router = nrfr.NestedSimpleRouter(router, r'projects', lookup='project')
 problem_router.register(r'problems', problem_view.ProblemViewSet)
 
+blog_router = nrfr.NestedSimpleRouter(router, r'projects', lookup='project')
+blog_router.register(r'blog_posts', blog_view.PostViewSet)
+
 # The API URLS are now determine automatically by the router.
 # Additionally, we include the login URLS for the browsable API.
 urlpatterns = [
@@ -31,4 +35,5 @@ urlpatterns = [
         url(r'^', include(ideas_router.urls)),
         url(r'^', include(discussion_router.urls)),
         url(r'^', include(problem_router.urls)),
+        url(r'^', include(blog_router.urls)),
 ]
