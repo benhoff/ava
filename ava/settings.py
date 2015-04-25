@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'ideas',
     'comments',
     'discussions',
+    'problems',
 )
 
 MIDDLEWARE_CLASSES = (

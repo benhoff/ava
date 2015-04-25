@@ -16,5 +16,5 @@ class Idea(models.Model):
 
     created = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
-    comments = generic.GenericRelation(Comment) 
+    comments = generic.GenericRelation(Comment, related_query_name='ideas') 
     # revisions?

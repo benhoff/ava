@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404
 from rest_extensions.permissions import IsOwnerOrReadOnly
 
 # TODO: Think about this name
-class NestedIdeaViewSet(viewsets.ModelViewSet):
+class IdeaViewSet(viewsets.ModelViewSet):
     """
     This viewset is nested under projects and provides 'list', 'create', 'retrieve', 'update', and 'destroy' actions
     """
