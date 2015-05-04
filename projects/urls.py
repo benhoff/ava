@@ -26,7 +26,7 @@ problem_router = nrfr.NestedSimpleRouter(router, r'projects', lookup='project')
 problem_router.register(r'problems', problem_view.ProblemViewSet)
 
 blog_router = nrfr.NestedSimpleRouter(router, r'projects', lookup='project')
-blog_router.register(r'blog_posts', blog_view.PostViewSet)
+blog_router.register(r'blog', blog_view.PostViewSet)
 
 # The API URLS are now determine automatically by the router.
 # Additionally, we include the login URLS for the browsable API.

@@ -39,11 +39,26 @@ class Comment(models.Model):
     content_object = generic.GenericForeignKey(ct_field="content_type", 
                                                fk_field="object_id")
 
-    owner = models.ForeignKey(User)
+    owner = models.ForeignKey(User, related_name='comments')
     content = models.CharField(max_length=3000)
     #votes = models.IntegerField()
     created = models.DateTimeField(auto_now_add=True)
-    edited = models.DateTimeField(auto_now=True)
+    edited = models.DateTimeField(blank=True, null=True)
+    edited_by = models.ForeignKey(User, 
+                                  related_name='comment_edits',
+                                  verbose_name='Edited by', 
+                                  blank=True, 
+                                  null=True)
+
+    # Markup? content_html? user_ip?
+
+    class Meta:
+        ordering = ['created']
+        get_latest_by = 'created'
+
+
+    # TODO: Add in deletion method
+
 
     class Meta:
         verbose_name=_('comment')
