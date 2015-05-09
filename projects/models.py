@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.contenttypes import generic
 
 # Idea generation stage -> Prototyping -> Manufacturing stage -> Store
 
@@ -18,6 +19,7 @@ class Project(models.Model):
              ('STORE','Store'))
 
     status = models.CharField(max_length=11, choices=STATI)
-    # wiki
+    wiki = generic.GenericRelation('wiki.Article',
+                                   related_query_name='projects')
     # Code -> Github link? Or something
     # Issues??
