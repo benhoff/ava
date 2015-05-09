@@ -14,14 +14,37 @@ class ArticleRevision(models.Model):
     previous_revision = models.ForeignKey('self', blank=True, null=True, on_delete=models.SET_NULL)
     locked = models.BooleanField(default=False)
 
+class ArticleManager(models.Manager):
+    def for_model(self, model):
+        """
+        QuerySet for all wiki for a particular model
+        (either an instance or a class)
+        """
+        ct = ContentType.objects.get_for_model(model)
+        queryset = self.get_queryset().filter(content_type=ct)
+        if isinstance(model, models.Model):
+            queryset = queryset.filter(object_id=force_text(model._get_pk_val()))
+
+        return queryset
+
 # TODO: add in comment like generic types.
 class Article(models.Model):
     current_revision = models.OneToOneField('ArticleRevision', verbose_name='current revision',
                                             blank=True, null=True, related_name='current_set')
+    objects = ArticleManager()
+    content_type = models.ForeignKey(ContentType,
+                                     verbose_name='content type',
+                                     related_name="content_type_set_for%(class)s",
+                                     null=True,
+                                     blank=True)
+
+    object_id = models.PositiveIntegerField(null=True)
+    content_object = generic.GenericForeignKey(ct_field="content_type",
+                                               fk_field="object_id")
 
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
-    owner = models.ForeignKey(User, blank=True, 
+    owner = models.ForeignKey('auth.User', blank=True, 
                               null=True, related_name='owned_articles', 
                               on_delete=models.SET_NULL)
 
