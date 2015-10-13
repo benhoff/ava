@@ -17,7 +17,7 @@ install:
 script: 
   - cd src
   - coverage run --source='.' manage.py test
-  - flake8 simpleyapsy
+  - flake8 src
   
 after_success:
   - coverage report
