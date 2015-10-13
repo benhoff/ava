@@ -1,0 +1,23 @@
+language: python
+
+notifications:
+  email: false
+
+python:
+  - "3.5"
+
+# command to install dependencies
+install:
+  - pip install flake8
+  - pip install coverage
+  - pip install python-coveralls
+
+# command to run tests
+script: 
+  - cd src
+  - coverage run --source='.' manage.py test
+  - flake8 simpleyapsy
+  
+after_success:
+  - coverage report
+  - coveralls
