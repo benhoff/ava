@@ -17,7 +17,7 @@ install:
 script: 
   - cd src
   - coverage run --source='.' manage.py test
-  - flake8 src
+  - flake8 .
   
 after_success:
   - coverage report
